@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Customer from './components/Customer'
 import Paper from "@material-ui/core/Paper"
 import Table from '@material-ui/core/Table';
@@ -34,35 +34,25 @@ const useStyles = makeStyles({
   },
 });
 
-const customers = [
-  {
-  'id' : 1,
-  'image' : 'https://placeimg.com/64/64/1',
-  'name' : '홍길동',
-  'birthday' : '980327',
-  'gender' : '남자',
-  'job' : '대학생'
-  },
-  {
-    'id' : 2,
-    'image' : 'https://placeimg.com/64/64/2',
-    'name' : '양준호',
-    'birthday' : '980327',
-    'gender' : '남자',
-    'job' : '디자이너'
-  },
-  {
-    'id' : 3,
-    'image' : 'https://placeimg.com/64/64/3',
-    'name' : '동빈나',
-    'birthday' : '980327',
-    'gender' : '남자',
-    'job' : '프로그래머'
-  }
-]
-
+function response() {
+  return fetch('/api/customer')
+    .then(data => data.json())
+}
 
 function App() {
+  const [customers, setList] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    response()
+      .then(items => {
+        if(mounted) {
+          setList(items)
+        }
+      })
+    return () => mounted = false;
+  })
+
   const classes = useStyles();
   return (
     <TableContainer component={Paper}>
@@ -78,7 +68,9 @@ function App() {
           </TableRow>
         </TableHead>
         <TableBody>
-          { customers.map(c => {return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />)})}
+          { customers ? customers.map(c => {
+            return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />)
+          }) : ""}
         </TableBody>
       </Table>
     </TableContainer>
