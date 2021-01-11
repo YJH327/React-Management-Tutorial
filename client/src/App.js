@@ -9,6 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -29,10 +31,19 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 1080,
+    table: {
+      minWidth: 1080,
+    },
   },
-});
+  (theme) => ({
+    root: {
+      display: 'flex',
+      '& > * + *': {
+        marginLeft: theme.spacing(2),
+      },
+    },
+  })
+);
 
 function response() {
   return fetch('/api/customer')
@@ -40,14 +51,14 @@ function response() {
 }
 
 function App() {
-  const [customers, setList] = useState([]);
+  const [customers, setCustomers] = useState("");
 
   useEffect(() => {
     let mounted = true;
     response()
       .then(items => {
         if(mounted) {
-          setList(items)
+          setCustomers(items)
         }
       })
     return () => mounted = false;
@@ -67,10 +78,15 @@ function App() {
             <StyledTableCell>직업</StyledTableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className={classes.root}>
           { customers ? customers.map(c => {
             return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />)
-          }) : ""}
+          }) : 
+          <TableRow>
+            <TableCell colSpan="6" align="center">
+              <CircularProgress />
+            </TableCell>
+          </TableRow>}
         </TableBody>
       </Table>
     </TableContainer>
