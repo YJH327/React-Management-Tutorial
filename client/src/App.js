@@ -1,7 +1,8 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import Customer from './components/Customer'
-import Paper from "@material-ui/core/Paper"
+import Customer from './components/Customer';
+import CustomerAdd from './components/CustomerAdd';
+import Paper from "@material-ui/core/Paper";
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -51,7 +52,7 @@ function response() {
 }
 
 function App() {
-  const [customers, setCustomers] = useState("");
+  const [customers, setCustomers] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -66,7 +67,8 @@ function App() {
 
   const classes = useStyles();
   return (
-    <TableContainer component={Paper}>
+    <div>
+      <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -89,7 +91,9 @@ function App() {
           </TableRow>}
         </TableBody>
       </Table>
-    </TableContainer>
+      </TableContainer>
+      <CustomerAdd/>
+    </div>
   );
 }
 
