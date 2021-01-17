@@ -51,6 +51,7 @@ function response() {
     .then(data => data.json())
 }
 
+
 function App() {
   const [customers, setCustomers] = useState('');
 
@@ -92,7 +93,7 @@ function App() {
         </TableBody>
       </Table>
       </TableContainer>
-      <CustomerAdd/>
+      <CustomerAdd />
     </div>
   );
 }
